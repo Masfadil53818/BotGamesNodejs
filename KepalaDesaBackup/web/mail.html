@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mail</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 10px 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .mail-container {
+    flex: 1;
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    overflow: hidden;
+  }
+
+  .mail-list {
+    width: 40%;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+  }
+
+  .mail-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .mail-list li {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .mail-list li:hover {
+    background-color: #f0f2f5;
+  }
+
+  .mail-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .compose-btn {
+    display: block;
+    margin: 10px;
+    padding: 10px 15px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s;
+  }
+
+  .compose-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .compose-form {
+    display: none;
+    flex-direction: column;
+  }
+
+  .compose-form input, .compose-form textarea {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+  }
+
+  .compose-form button {
+    width: 100px;
+  }
+
+</style>
+</head>
+<body>
+
+<header>Mail</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="mail-container">
+  <div class="mail-list">
+    <button class="compose-btn" id="composeBtn">✉️ Buat Email</button>
+    <ul id="inboxList">
+      <li data-subject="Selamat Datang" data-content="Ini adalah email percobaan 1">Selamat Datang</li>
+      <li data-subject="Reminder" data-content="Jangan lupa meeting jam 3 sore">Reminder</li>
+      <li data-subject="Update" data-content="Versi terbaru telah tersedia">Update</li>
+    </ul>
+  </div>
+  <div class="mail-content" id="mailContent">
+    <p>Pilih email untuk membaca isi...</p>
+  </div>
+</div>
+
+<script>
+const inboxList = document.getElementById('inboxList');
+const mailContent = document.getElementById('mailContent');
+const composeBtn = document.getElementById('composeBtn');
+
+// Klik email untuk tampilkan konten
+inboxList.querySelectorAll('li').forEach(li => {
+  li.addEventListener('click', () => {
+    const subject = li.dataset.subject;
+    const content = li.dataset.content;
+    mailContent.innerHTML = `<h2>${subject}</h2><p>${content}</p>`;
+  });
+});
+
+// Compose email
+composeBtn.addEventListener('click', () => {
+  mailContent.innerHTML = `
+    <h2>Buat Email Baru</h2>
+    <div class="compose-form">
+      <input type="text" id="toInput" placeholder="Kepada">
+      <input type="text" id="subjectInput" placeholder="Subjek">
+      <textarea id="bodyInput" rows="6" placeholder="Tulis pesan..."></textarea>
+      <button id="sendBtn">Kirim</button>
+    </div>
+  `;
+  const form = mailContent.querySelector('.compose-form');
+  form.style.display = 'flex';
+
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.addEventListener('click', () => {
+    const to = document.getElementById('toInput').value.trim();
+    const subject = document.getElementById('subjectInput').value.trim();
+    const body = document.getElementById('bodyInput').value.trim();
+
+    if(to && subject && body) {
+      alert(`Email terkirim ke ${to}!\nSubjek: ${subject}\nIsi: ${body}`);
+      form.reset();
+      mailContent.innerHTML = `<p>Pilih email untuk membaca isi...</p>`;
+    } else {
+      alert('Isi semua field!');
+    }
+  });
+});
+</script>
+
+</body>
+</html>

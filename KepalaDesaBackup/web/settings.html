@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .container {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+  }
+
+  .setting-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .setting-card h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .setting-card input[type="text"],
+  .setting-card input[type="number"],
+  .setting-card select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  .save-btn {
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: background 0.3s;
+  }
+
+  .save-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+</style>
+</head>
+<body>
+
+<header>Settings</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="container">
+  <div class="setting-card">
+    <h3>Bot Prefix</h3>
+    <input type="text" id="botPrefix" placeholder="Masukkan prefix bot">
+  </div>
+
+  <div class="setting-card">
+    <h3>Max Users</h3>
+    <input type="number" id="maxUsers" placeholder="Masukkan jumlah maksimum">
+  </div>
+
+  <div class="setting-card">
+    <h3>Theme</h3>
+    <select id="themeSelect">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="blue">Blue</option>
+    </select>
+  </div>
+
+  <button class="save-btn" onclick="saveSettings()">💾 Simpan Pengaturan</button>
+</div>
+
+<script>
+function saveSettings() {
+  const prefix = document.getElementById('botPrefix').value;
+  const maxUsers = document.getElementById('maxUsers').value;
+  const theme = document.getElementById('themeSelect').value;
+
+  // Kirim data ke bot via fetch API
+  fetch('http://127.0.0.1:5000/api/settings', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      prefix: prefix,
+      max_users: maxUsers,
+      theme: theme
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert('Pengaturan berhasil disimpan!');
+    console.log(data);
+  })
+  .catch(err => {
+    console.error('Gagal menyimpan pengaturan:', err);
+  });
+}
+</script>
+
+</body>
+</html>

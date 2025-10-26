@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .profile-container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .profile-pic {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto;
+    display: block;
+    object-fit: cover;
+    border: 3px solid #4a90e2;
+  }
+
+  .profile-info {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  .profile-info h2 {
+    margin: 10px 0 5px 0;
+    font-size: 22px;
+    color: #333;
+  }
+
+  .profile-info p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 16px;
+  }
+
+  .profile-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+
+  .stat {
+    background: #f0f2f5;
+    padding: 15px;
+    border-radius: 10px;
+    width: 100px;
+    text-align: center;
+  }
+
+  .stat h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #4a90e2;
+  }
+
+  .stat p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<header>Profile</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="profile-container">
+  <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="Profile Pic" class="profile-pic" id="profilePic">
+
+  <div class="profile-info">
+    <h2 id="profileName">Nama Bot/User</h2>
+    <p id="profileID">ID: 1234567890</p>
+    <p id="profileDesc">Deskripsi singkat tentang bot atau user.</p>
+  </div>
+
+  <div class="profile-stats">
+    <div class="stat">
+      <h3 id="statServers">12</h3>
+      <p>Servers</p>
+    </div>
+    <div class="stat">
+      <h3 id="statMembers">1254</h3>
+      <p>Members</p>
+    </div>
+    <div class="stat">
+      <h3 id="statCommands">34</h3>
+      <p>Commands</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// Fetch data profil dari bot (contoh endpoint /api/profile)
+async function loadProfile() {
+  try {
+    const response = await fetch('http://127.0.0.1:5000/api/profile'); // endpoint di bot
+    const data = await response.json();
+
+    document.getElementById('profilePic').src = data.avatar_url || 'https://cdn-icons-png.flaticon.com/512/3177/3177440.png';
+    document.getElementById('profileName').textContent = data.name || 'Nama Bot/User';
+    document.getElementById('profileID').textContent = `ID: ${data.id || '1234567890'}`;
+    document.getElementById('profileDesc').textContent = data.description || 'Deskripsi singkat tentang bot atau user.';
+    document.getElementById('statServers').textContent = data.servers || 0;
+    document.getElementById('statMembers').textContent = data.members || 0;
+    document.getElementById('statCommands').textContent = data.commands || 0;
+  } catch(err) {
+    console.error('Gagal mengambil data profile:', err);
+  }
+}
+
+// Jalankan saat load
+loadProfile();
+</script>
+
+</body>
+</html>

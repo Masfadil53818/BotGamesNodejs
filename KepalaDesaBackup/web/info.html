@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .info-container {
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .info-item {
+    margin-bottom: 15px;
+  }
+
+  .info-item h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #4a90e2;
+  }
+
+  .info-item p {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<header>Info</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="info-container">
+  <div class="info-item">
+    <h3>Bot Name</h3>
+    <p id="botName">My Discord Bot</p>
+  </div>
+
+  <div class="info-item">
+    <h3>Version</h3>
+    <p id="botVersion">1.0.0</p>
+  </div>
+
+  <div class="info-item">
+    <h3>Library</h3>
+    <p id="botLibrary">discord.py</p>
+  </div>
+
+  <div class="info-item">
+    <h3>Server Count</h3>
+    <p id="serverCount">12</p>
+  </div>
+
+  <div class="info-item">
+    <h3>Members Count</h3>
+    <p id="memberCount">1254</p>
+  </div>
+
+  <div class="info-item">
+    <h3>Uptime</h3>
+    <p id="uptime">00:12:34</p>
+  </div>
+</div>
+
+<script>
+// Fetch data info dari bot (contoh endpoint /api/info)
+async function loadInfo() {
+  try {
+    const response = await fetch('http://127.0.0.1:5000/api/info'); // endpoint di bot
+    const data = await response.json();
+
+    document.getElementById('botName').textContent = data.name || 'My Discord Bot';
+    document.getElementById('botVersion').textContent = data.version || '1.0.0';
+    document.getElementById('botLibrary').textContent = data.library || 'discord.py';
+    document.getElementById('serverCount').textContent = data.servers || 0;
+    document.getElementById('memberCount').textContent = data.members || 0;
+    document.getElementById('uptime').textContent = data.uptime || '00:00:00';
+  } catch(err) {
+    console.error('Gagal mengambil data info:', err);
+  }
+}
+
+// Jalankan saat load
+loadInfo();
+</script>
+
+</body>
+</html>

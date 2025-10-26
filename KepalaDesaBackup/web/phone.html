@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phone</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .phone-container {
+    max-width: 400px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  #phoneInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+  }
+
+  button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background-color: #357ABD;
+  }
+
+  .call-history {
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .call-history h3 {
+    margin-bottom: 10px;
+    color: #4a90e2;
+  }
+
+  .call-history ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .call-history li {
+    background: #f0f2f5;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>Phone</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="phone-container">
+  <input type="text" id="phoneInput" placeholder="Masukkan nomor...">
+  <div>
+    <button id="callBtn">📞 Panggil</button>
+    <button id="clearBtn">❌ Bersihkan</button>
+  </div>
+
+  <div class="call-history">
+    <h3>Riwayat Panggilan</h3>
+    <ul id="historyList">
+      <!-- History muncul di sini -->
+    </ul>
+  </div>
+</div>
+
+<script>
+const phoneInput = document.getElementById('phoneInput');
+const callBtn = document.getElementById('callBtn');
+const clearBtn = document.getElementById('clearBtn');
+const historyList = document.getElementById('historyList');
+
+// Load history dari localStorage
+let history = JSON.parse(localStorage.getItem('callHistory')) || [];
+
+function renderHistory() {
+  historyList.innerHTML = '';
+  history.slice().reverse().forEach(num => {
+    const li = document.createElement('li');
+    li.textContent = num;
+    historyList.appendChild(li);
+  });
+}
+
+callBtn.addEventListener('click', () => {
+  const number = phoneInput.value.trim();
+  if(number !== '') {
+    alert(`Memanggil ${number}...`);
+    history.push(number);
+    localStorage.setItem('callHistory', JSON.stringify(history));
+    phoneInput.value = '';
+    renderHistory();
+  }
+});
+
+clearBtn.addEventListener('click', () => {
+  phoneInput.value = '';
+});
+
+renderHistory();
+</script>
+
+</body>
+</html>

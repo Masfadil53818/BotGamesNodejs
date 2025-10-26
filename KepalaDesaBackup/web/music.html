@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .player-container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  .album-art {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid #4a90e2;
+  }
+
+  .song-title {
+    margin: 15px 0 5px 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .song-artist {
+    margin: 0 0 15px 0;
+    color: #555;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+  }
+
+  .controls button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+
+  .controls button:hover {
+    background-color: #357ABD;
+  }
+
+  .volume-control {
+    margin-top: 15px;
+  }
+
+  .playlist {
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .playlist li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .playlist li:hover {
+    background-color: #f0f2f5;
+  }
+
+  audio {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<header>Music Player</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="player-container">
+  <img src="https://cdn-icons-png.flaticon.com/512/727/727218.png" alt="Album Art" class="album-art" id="albumArt">
+
+  <div class="song-title" id="songTitle">Song Name</div>
+  <div class="song-artist" id="songArtist">Artist Name</div>
+
+  <div class="controls">
+    <button id="prevBtn">⏮️</button>
+    <button id="playPauseBtn">▶️</button>
+    <button id="nextBtn">⏭️</button>
+  </div>
+
+  <div class="volume-control">
+    <label for="volumeRange">Volume:</label>
+    <input type="range" id="volumeRange" min="0" max="1" step="0.01" value="0.5">
+  </div>
+
+  <ul class="playlist" id="playlist">
+    <li data-src="song1.mp3">Song 1 - Artist A</li>
+    <li data-src="song2.mp3">Song 2 - Artist B</li>
+    <li data-src="song3.mp3">Song 3 - Artist C</li>
+  </ul>
+
+  <audio id="audioPlayer"></audio>
+</div>
+
+<script>
+const audio = document.getElementById('audioPlayer');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const volumeRange = document.getElementById('volumeRange');
+const playlist = document.getElementById('playlist').querySelectorAll('li');
+const songTitle = document.getElementById('songTitle');
+const songArtist = document.getElementById('songArtist');
+const albumArt = document.getElementById('albumArt');
+
+let currentSongIndex = 0;
+
+// Load song
+function loadSong(index) {
+  const li = playlist[index];
+  audio.src = li.dataset.src;
+  const [title, artist] = li.textContent.split(' - ');
+  songTitle.textContent = title;
+  songArtist.textContent = artist;
+  playAudio();
+}
+
+// Play / Pause
+function playAudio() {
+  audio.play();
+  playPauseBtn.textContent = '⏸️';
+}
+
+function pauseAudio() {
+  audio.pause();
+  playPauseBtn.textContent = '▶️';
+}
+
+// Buttons
+playPauseBtn.addEventListener('click', () => {
+  if(audio.paused) playAudio();
+  else pauseAudio();
+});
+
+prevBtn.addEventListener('click', () => {
+  currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+  loadSong(currentSongIndex);
+});
+
+nextBtn.addEventListener('click', () => {
+  currentSongIndex = (currentSongIndex + 1) % playlist.length;
+  loadSong(currentSongIndex);
+});
+
+// Volume control
+volumeRange.addEventListener('input', () => {
+  audio.volume = volumeRange.value;
+});
+
+// Playlist click
+playlist.forEach((li, index) => {
+  li.addEventListener('click', () => {
+    currentSongIndex = index;
+    loadSong(currentSongIndex);
+  });
+});
+
+// Load first song by default
+loadSong(currentSongIndex);
+</script>
+
+</body>
+</html>

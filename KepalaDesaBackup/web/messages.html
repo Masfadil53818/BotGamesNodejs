@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 10px 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+
+  .chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+  }
+
+  .message {
+    padding: 8px 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    max-width: 70%;
+  }
+
+  .message.user {
+    background-color: #4a90e2;
+    color: white;
+    align-self: flex-end;
+  }
+
+  .message.bot {
+    background-color: #f0f2f5;
+    color: #2f3640;
+    align-self: flex-start;
+  }
+
+  .chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+  }
+
+  .chat-input input {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-right: 10px;
+  }
+
+  .chat-input button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+  }
+
+  .chat-input button:hover {
+    background-color: #357ABD;
+  }
+</style>
+</head>
+<body>
+
+<header>Messages</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="chat-container">
+  <div class="chat-messages" id="chatMessages">
+    <!-- Pesan akan muncul di sini -->
+  </div>
+
+  <div class="chat-input">
+    <input type="text" id="messageInput" placeholder="Tulis pesan...">
+    <button id="sendBtn">Kirim</button>
+  </div>
+</div>
+
+<script>
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+
+// Load chat history dari localStorage
+let messages = JSON.parse(localStorage.getItem('messages')) || [];
+
+function renderMessages() {
+  chatMessages.innerHTML = '';
+  messages.forEach(msg => {
+    const div = document.createElement('div');
+    div.classList.add('message', msg.type);
+    div.textContent = msg.text;
+    chatMessages.appendChild(div);
+  });
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+function addMessage(text, type) {
+  messages.push({ text, type });
+  localStorage.setItem('messages', JSON.stringify(messages));
+  renderMessages();
+}
+
+// Kirim pesan
+sendBtn.addEventListener('click', () => {
+  const text = messageInput.value.trim();
+  if(text !== '') {
+    addMessage(text, 'user');
+    messageInput.value = '';
+    // Simulasi balasan bot
+    setTimeout(() => {
+      addMessage('Bot membalas: ' + text, 'bot');
+    }, 500);
+  }
+});
+
+messageInput.addEventListener('keypress', e => {
+  if(e.key === 'Enter') sendBtn.click();
+});
+
+// Render saat load
+renderMessages();
+</script>
+
+</body>
+</html>

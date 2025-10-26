@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camera</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f6fa;
+    color: #2f3640;
+  }
+
+  header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin: 20px;
+    text-decoration: none;
+    background-color: #4a90e2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .back-btn:hover {
+    background-color: #357ABD;
+  }
+
+  .camera-container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  video {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 15px;
+  }
+
+  canvas {
+    display: none;
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 15px;
+  }
+
+  button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 5px;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background-color: #357ABD;
+  }
+</style>
+</head>
+<body>
+
+<header>Camera</header>
+
+<a class="back-btn" href="home.html">⬅️ Kembali ke Home Screen</a>
+
+<div class="camera-container">
+  <video id="camera" autoplay></video>
+  <canvas id="canvas"></canvas>
+  <div>
+    <button id="snapBtn">📸 Ambil Foto</button>
+    <button id="downloadBtn">💾 Simpan Foto</button>
+  </div>
+</div>
+
+<script>
+const video = document.getElementById('camera');
+const canvas = document.getElementById('canvas');
+const snapBtn = document.getElementById('snapBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const context = canvas.getContext('2d');
+
+// Akses kamera
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    video.srcObject = stream;
+  })
+  .catch(err => {
+    alert('Gagal mengakses kamera: ' + err);
+    console.error(err);
+  });
+
+// Ambil foto
+snapBtn.addEventListener('click', () => {
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  canvas.style.display = 'block';
+});
+
+// Download foto
+downloadBtn.addEventListener('click', () => {
+  const image = canvas.toDataURL('image/png');
+  const link = document.createElement('a');
+  link.href = image;
+  link.download = `foto_${Date.now()}.png`;
+  link.click();
+});
+</script>
+
+</body>
+</html>
